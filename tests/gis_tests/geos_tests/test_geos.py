@@ -1341,3 +1341,12 @@ class GEOSTest(SimpleTestCase, TestDataMixin):
         for geom in self.geometries.multipolygons:
             mpoly = GEOSGeometry(geom.wkt)
             self.assertEqual(mpoly.cascaded_union, mpoly.unary_union)
+
+    def test_ticket_25342(self):
+        p1 = Point(x=1, y=1, z=1, srid=4326)
+        p2 = Point(x=1.1, y=1, z=1, srid=4326)
+        p3 = Point(x=1, y=1, z=2, srid=4326)
+
+        self.assertEqual(p1, p1)
+        self.assertNotEqual(p1, p2)
+        self.assertNotEqual(p1, p3)
