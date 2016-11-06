@@ -553,3 +553,7 @@ class OGRGeomTest(unittest.TestCase, TestDataMixin):
                 '</gml:Point>'
             ),
         )
+
+    def test_default_geometry_type(self):
+        geom = OGRGeomType('GEOMETRY')
+        self.assertEquals(str(geom), 'Geometry')
