@@ -89,7 +89,7 @@ class GetObjectOr404Tests(TestCase):
         # Given an argument klass that is not a Model, Manager, or Queryset
         # raises a helpful ValueError message
         msg = (
-            "First argument to get_object_or_404() must be a Model, Manager, or "
+            "First argument to aget_object_or_404() must be a Model, Manager, or "
             "QuerySet, not 'str'."
         )
         with self.assertRaisesMessage(ValueError, msg):
@@ -99,7 +99,7 @@ class GetObjectOr404Tests(TestCase):
             pass
 
         msg = (
-            "First argument to get_object_or_404() must be a Model, Manager, or "
+            "First argument to aget_object_or_404() must be a Model, Manager, or "
             "QuerySet, not 'CustomClass'."
         )
         with self.assertRaisesMessage(ValueError, msg):
@@ -107,7 +107,7 @@ class GetObjectOr404Tests(TestCase):
 
         # Works for lists too
         msg = (
-            "First argument to get_list_or_404() must be a Model, Manager, or "
+            "First argument to aget_list_or_404() must be a Model, Manager, or "
             "QuerySet, not 'list'."
         )
         with self.assertRaisesMessage(ValueError, msg):

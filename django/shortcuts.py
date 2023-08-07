@@ -12,6 +12,7 @@ from django.http import (
 from django.template import loader
 from django.urls import NoReverseMatch, reverse
 from django.utils.functional import Promise
+from asgiref.sync import async_to_sync
 
 
 def render(
@@ -72,21 +73,8 @@ def get_object_or_404(klass, *args, **kwargs):
     Like with QuerySet.get(), MultipleObjectsReturned is raised if more than
     one object is found.
     """
-    queryset = _get_queryset(klass)
-    if not hasattr(queryset, "get"):
-        klass__name = (
-            klass.__name__ if isinstance(klass, type) else klass.__class__.__name__
-        )
-        raise ValueError(
-            "First argument to get_object_or_404() must be a Model, Manager, "
-            "or QuerySet, not '%s'." % klass__name
-        )
-    try:
-        return queryset.get(*args, **kwargs)
-    except queryset.model.DoesNotExist:
-        raise Http404(
-            "No %s matches the given query." % queryset.model._meta.object_name
-        )
+    return async_to_sync(aget_object_or_404)(klass, *args, **kwargs)
+
 
 
 async def aget_object_or_404(klass, *args, **kwargs):
@@ -114,21 +102,7 @@ def get_list_or_404(klass, *args, **kwargs):
     klass may be a Model, Manager, or QuerySet object. All other passed
     arguments and keyword arguments are used in the filter() query.
     """
-    queryset = _get_queryset(klass)
-    if not hasattr(queryset, "filter"):
-        klass__name = (
-            klass.__name__ if isinstance(klass, type) else klass.__class__.__name__
-        )
-        raise ValueError(
-            "First argument to get_list_or_404() must be a Model, Manager, or "
-            "QuerySet, not '%s'." % klass__name
-        )
-    obj_list = list(queryset.filter(*args, **kwargs))
-    if not obj_list:
-        raise Http404(
-            "No %s matches the given query." % queryset.model._meta.object_name
-        )
-    return obj_list
+    return async_to_sync(aget_list_or_404)(klass, *args, **kwargs)
 
 
 async def aget_list_or_404(klass, *args, **kwargs):
